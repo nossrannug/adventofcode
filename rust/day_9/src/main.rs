@@ -1,5 +1,5 @@
 use common::get_file_content;
-use std::{collections::{HashSet, VecDeque}, env};
+use std::{collections::{VecDeque}, env};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -23,7 +23,6 @@ fn process(n: usize, numbers: &Vec<i64>) -> i64 {
             q.push_back(*number);
             continue;
         }
-        // println!("Q:{:?}, n:{:?}", q, *number);
 
         if !has_sum(*number, &q) {
             return *number;
@@ -37,7 +36,6 @@ fn process(n: usize, numbers: &Vec<i64>) -> i64 {
 fn process_2(n: usize, numbers: &Vec<i64>) -> i64 {
     let number = process(n, numbers);
     let (a,b) = get_slice(number, numbers);
-    println!("{:?},{:?}",a,b);
     let slice = &numbers[a..=b];
     slice.iter().min().unwrap() + slice.iter().max().unwrap()
 }
