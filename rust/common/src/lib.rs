@@ -7,11 +7,3 @@ pub fn get_file_content(path: String) -> std::io::Result<String> {
     file.read_to_string(&mut contents)?;
     Ok(contents)
 }
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
