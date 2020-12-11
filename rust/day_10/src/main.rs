@@ -1,30 +1,5 @@
 use common::get_file_content;
-use std::{collections::{HashSet}, env};
-use std::hash::{
-    Hash,
-    BuildHasher,
-};
-
-/// Takes an arbitrary element from a `HashSet`, or None if empty
-pub fn hashset_take_arbitrary<K, S> (
-    set: &mut HashSet<K, S>,
-) -> Option<K>
-where
-    K: Hash + Eq,
-    S: BuildHasher,
-{
-    let key_ref = {
-        if let Some(key_ref) = set.iter().next() {
-            /* must hide the origin of this borrow ... */
-            unsafe { &*(key_ref as *const _) }
-        } else {
-            return None
-        }
-    };
-    /* ... so that we may be able to mutably borrow the set here
-       despite key_ref existence */
-    set.take(key_ref)
-}
+use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -36,10 +11,12 @@ fn main() {
 fn part_1(contents: &String) -> i64 {
     let mut numbers = get_numbers(contents);
     numbers.sort();
+    // Count the number of gaps of 1 and gaps of 3
     let mut one = 0;
     let mut three = 1;
     let mut current = 0;
     for n in numbers {
+        // There are only gaps of 1 and 3, no 2
         if n - current == 1 {
             one += 1;
         } else if n - current == 3 {
@@ -47,35 +24,38 @@ fn part_1(contents: &String) -> i64 {
         }
         current = n;
     }
+    // Multiply the number of 1 and 3 gaps to get the answer
     one * three
 }
-fn part_2(contents: &String) -> usize {
-    1
-    // let mut numbers = get_numbers(contents);
-    // numbers.push(numbers.iter().max().unwrap()+3);
-    // numbers.push(0);
-    // numbers.sort();
-    // let mut found = HashSet::new();
-    // found.insert(numbers.clone());
-    // let mut queue = vec![numbers.clone()];
-    // loop {
-    //     if queue.len() == 0 {
-    //         break;
-    //     }
-    //     let process = queue.pop().unwrap();
-    //     for i in 1..process.len()-1 {
-    //         if process[i+1] - process[i-1] <= 3 {
-    //             let mut v = process.clone();
-    //             v.remove(i);
-    //             if found.insert(v.clone()) {
-    //                 queue.push(v.clone());
-    //                 println!("q: {}", queue.len());
-    //                 println!("f: {}", found.len());
-    //             }
-    //         }
-    //     }
-    // }
-    // found.len()
+
+fn part_2(contents: &String) -> i64 {
+    let mut numbers = get_numbers(contents);
+    // add the first 0 and the last (max + 3)
+    numbers.push(0);
+    numbers.push(numbers.iter().max().unwrap()+3);
+    // sort
+    numbers.sort();
+    // Create array to count how many combinations can be created at each adapter
+    // This allows us to keep track of how many paths there are without recalculating
+    // each time
+    let mut counter = numbers.iter().map(|_| 0).collect::<Vec<i64>>();
+    // First adapter only has one combination
+    counter[0] = 1;
+
+    for a in 0..numbers.len() {
+        for b in a+1..numbers.len() {
+            // If the next adapter we look at is over 3 from the current we break
+            if numbers[a] + 3 < numbers[b] {
+                break;
+            }
+            // If we can get to this adapter from the current adapter
+            // we can sum how many paths there are to this adapter + paths to the current
+            counter[b] = counter[a] + counter[b];
+        }
+    }
+    // Last item in the vector is the number of possible combinations of all
+    // adapters in the bag
+    counter[counter.len()-1]
 }
 
 fn get_numbers(contents: &String) -> Vec<i64> {
@@ -157,12 +137,4 @@ mod tests {
             .to_string();
         assert_eq!(super::part_2(&test_data), 19208);
     }
-
-    #[test]
-    fn part_2_1() {
-        let test_data = "1\n2\n3"
-            .to_string();
-        assert_eq!(super::part_2(&test_data), 4);
-    }
-
 }
