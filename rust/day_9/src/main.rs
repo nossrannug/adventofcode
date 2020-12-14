@@ -1,5 +1,5 @@
 use common::get_file_content;
-use std::{collections::{VecDeque}, env};
+use std::{collections::VecDeque, env};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -35,30 +35,30 @@ fn process(n: usize, numbers: &Vec<i64>) -> i64 {
 
 fn process_2(n: usize, numbers: &Vec<i64>) -> i64 {
     let number = process(n, numbers);
-    let (a,b) = get_slice(number, numbers);
+    let (a, b) = get_slice(number, numbers);
     let slice = &numbers[a..=b];
     slice.iter().min().unwrap() + slice.iter().max().unwrap()
 }
 
-fn get_slice(x:i64, numbers: &Vec<i64>) -> (usize, usize) {
-    for a in 0..numbers.len()-1 {
+fn get_slice(x: i64, numbers: &Vec<i64>) -> (usize, usize) {
+    for a in 0..numbers.len() - 1 {
         let mut sum = numbers[a];
-        for b in a+1..numbers.len() {
+        for b in a + 1..numbers.len() {
             sum += numbers[b];
             if sum == x {
-                return (a,b);
+                return (a, b);
             }
             if sum > x {
                 break;
             }
         }
     }
-    (0,0)
+    (0, 0)
 }
 
 fn has_sum(x: i64, v: &VecDeque<i64>) -> bool {
-    for a in 0..v.len()-1 {
-        for b in a+1..v.len() {
+    for a in 0..v.len() - 1 {
+        for b in a + 1..v.len() {
             if v[a] + v[b] == x {
                 return true;
             }
@@ -68,7 +68,10 @@ fn has_sum(x: i64, v: &VecDeque<i64>) -> bool {
 }
 
 fn get_numbers(contents: &String) -> Vec<i64> {
-    contents.split('\n').map(|line| line.parse::<i64>().unwrap()).collect()
+    contents
+        .split('\n')
+        .map(|line| line.parse::<i64>().unwrap())
+        .collect()
 }
 
 #[cfg(test)]
@@ -95,7 +98,7 @@ mod tests {
 277
 309
 576"
-            .to_string();
+        .to_string();
         assert_eq!(super::process(5, &super::get_numbers(&test_data)), 127);
     }
 
@@ -121,7 +124,7 @@ mod tests {
 277
 309
 576"
-            .to_string();
-            assert_eq!(super::process_2(5, &super::get_numbers(&data)), 62);
+        .to_string();
+        assert_eq!(super::process_2(5, &super::get_numbers(&data)), 62);
     }
 }

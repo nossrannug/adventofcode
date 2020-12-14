@@ -21,7 +21,7 @@ Action F means to move forward by the given value in the direction the ship is c
 #[derive(Debug)]
 struct Ship {
     facing: char,
-    coords: (i32,i32),
+    coords: (i32, i32),
 }
 
 impl Ship {
@@ -37,43 +37,46 @@ impl Ship {
         match instruction.chars().nth(0).unwrap() {
             'N' => {
                 self.coords.1 += n;
-            },
+            }
             'S' => {
                 self.coords.1 -= n;
-            },
+            }
             'E' => {
                 self.coords.0 += n;
-            },
+            }
             'W' => {
                 self.coords.0 -= n;
-            },
+            }
             'L' => {
                 self.change_direction(n, 'L');
-            },
+            }
             'R' => {
                 self.change_direction(n, 'R');
-            },
+            }
             'F' => {
                 self.coords.0 += self.get_direction().0 * n;
                 self.coords.1 += self.get_direction().1 * n;
-            },
-            _ => panic!("ARGH!")
+            }
+            _ => panic!("ARGH!"),
         }
     }
 
-    fn get_direction(&self) -> (i32,i32) {
+    fn get_direction(&self) -> (i32, i32) {
         match self.facing {
-            'N' => (0,1),
-            'S' => (0,-1),
-            'E' => (1,0),
-            'W' => (-1,0),
+            'N' => (0, 1),
+            'S' => (0, -1),
+            'E' => (1, 0),
+            'W' => (-1, 0),
             _ => panic!("asdf"),
         }
     }
 
     fn change_direction(&mut self, degrees: i32, direction: char) {
-        let directions = vec!['E','N','W','S'];
-        let mut n = directions.iter().position(|&item| item == self.facing).unwrap() as i32;
+        let directions = vec!['E', 'N', 'W', 'S'];
+        let mut n = directions
+            .iter()
+            .position(|&item| item == self.facing)
+            .unwrap() as i32;
         let turns = degrees / 90;
         if direction == 'L' {
             n += turns;
@@ -95,7 +98,10 @@ impl Ship {
 }
 
 fn part_1(contents: &String) -> i32 {
-    let instructions = contents.split('\n').map(|line| line.to_string()).collect::<Vec<String>>();
+    let instructions = contents
+        .split('\n')
+        .map(|line| line.to_string())
+        .collect::<Vec<String>>();
     let mut ship = Ship::new();
     for instruction in instructions {
         ship.move_ship(&instruction);
@@ -104,7 +110,15 @@ fn part_1(contents: &String) -> i32 {
 }
 
 fn part_2(contents: &String) -> i32 {
-    1
+    let instructions = contents
+        .split('\n')
+        .map(|line| line.to_string())
+        .collect::<Vec<String>>();
+    let mut ship = Ship::new();
+    for instruction in instructions {
+        ship.move_ship(&instruction);
+    }
+    ship.manhattan()
 }
 
 #[cfg(test)]
@@ -116,7 +130,7 @@ N3
 F7
 R90
 F11"
-            .to_string();
+        .to_string();
         assert_eq!(super::part_1(&test_data), 25);
     }
 
@@ -127,7 +141,7 @@ N3
 F7
 R90
 F11"
-            .to_string();
+        .to_string();
         assert_eq!(super::part_2(&test_data), -1);
     }
 }

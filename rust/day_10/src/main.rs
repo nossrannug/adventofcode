@@ -32,7 +32,7 @@ fn part_2(contents: &String) -> i64 {
     let mut numbers = get_numbers(contents);
     // add the first 0 and the last (max + 3)
     numbers.push(0);
-    numbers.push(numbers.iter().max().unwrap()+3);
+    numbers.push(numbers.iter().max().unwrap() + 3);
     // sort
     numbers.sort();
     // Create array to count how many combinations can be created at each adapter
@@ -43,7 +43,7 @@ fn part_2(contents: &String) -> i64 {
     counter[0] = 1;
 
     for a in 0..numbers.len() {
-        for b in a+1..numbers.len() {
+        for b in a + 1..numbers.len() {
             // If the next adapter we look at is over 3 from the current we break
             if numbers[a] + 3 < numbers[b] {
                 break;
@@ -55,11 +55,14 @@ fn part_2(contents: &String) -> i64 {
     }
     // Last item in the vector is the number of possible combinations of all
     // adapters in the bag
-    counter[counter.len()-1]
+    counter[counter.len() - 1]
 }
 
 fn get_numbers(contents: &String) -> Vec<i64> {
-    contents.split('\n').map(|line| line.parse::<i64>().unwrap()).collect()
+    contents
+        .split('\n')
+        .map(|line| line.parse::<i64>().unwrap())
+        .collect()
 }
 
 #[cfg(test)]
@@ -97,7 +100,7 @@ mod tests {
 34
 10
 3"
-            .to_string();
+        .to_string();
         assert_eq!(super::part_1(&test_data), 220);
     }
 
@@ -134,7 +137,7 @@ mod tests {
 34
 10
 3"
-            .to_string();
+        .to_string();
         assert_eq!(super::part_2(&test_data), 19208);
     }
 }
