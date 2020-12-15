@@ -23,10 +23,7 @@ impl E {
     }
 
     pub fn write_to_mem_v2(&mut self, loc: i64, v: i64) {
-        self.memory.insert(
-            loc,
-            v,
-        );
+        self.memory.insert(loc, v);
     }
 
     pub fn sum_memory(&self) -> i64 {
