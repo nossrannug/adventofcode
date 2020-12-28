@@ -11,17 +11,16 @@ fn main() {
 fn part_1(contents: &String) -> i32 {
     let lines = contents.split('\n').collect::<Vec<&str>>();
     let depart = lines[0].parse::<i32>().unwrap();
-    let busses = lines[1].split(',').fold(Vec::new(), |mut agg, item| {
+    let buses = lines[1].split(',').fold(Vec::new(), |mut agg, item| {
         match item.parse::<i32>() {
             Ok(n) => agg.push(n),
             _ => {}
         }
         agg
     });
-    println!("{:?}", busses);
     let mut m = depart;
     let mut m_id = -1;
-    for b in busses {
+    for b in buses {
         let t = b - (depart % b);
         if t < m {
             m = t;
@@ -31,8 +30,28 @@ fn part_1(contents: &String) -> i32 {
     m_id * m
 }
 
-fn part_2(contents: &String) -> i32 {
-    1
+fn find_timestamp(buses: Vec<(usize, i32)>) -> i64 {
+    let mut n = 0;
+    let mut inc = buses[0].1 as i64;
+    for v in buses.iter().skip(1) {
+        while (n + v.0 as i64) % (v.1 as i64) != 0 {
+            n += inc;
+        }
+        inc *= v.1 as i64;
+    }
+    n
+}
+
+fn part_2(contents: &String) -> i64 {
+    let lines = contents.split('\n').collect::<Vec<&str>>();
+    let buses = lines[1].split(',').enumerate().fold(Vec::new(), |mut agg, v| {
+        match v.1.parse::<i32>() {
+            Ok(n) => agg.push((v.0, n)),
+            _ => {}
+        }
+        agg
+    });
+    find_timestamp(buses)
 }
 
 #[cfg(test)]
@@ -47,12 +66,9 @@ mod tests {
 
     #[test]
     fn part_2() {
-        let test_data = "F10
-N3
-F7
-R90
-F11"
+        let test_data = "939
+7,13,x,x,59,x,31,19"
         .to_string();
-        assert_eq!(super::part_2(&test_data), -1);
+        assert_eq!(super::part_2(&test_data), 1068781);
     }
 }
