@@ -91,10 +91,62 @@ impl Ship {
         }
         self.facing = directions[n as usize];
     }
+}
 
-    pub fn manhattan(&self) -> i32 {
-        self.coords.0.abs() + self.coords.1.abs()
+#[derive(Debug)]
+struct ShipWithWaypoint {
+    coords: (i32, i32),
+    waypoint: (i32, i32),
+}
+
+impl ShipWithWaypoint {
+    pub fn new(waypoint: (i32, i32)) -> ShipWithWaypoint {
+        ShipWithWaypoint {
+            coords: (0, 0),
+            waypoint
+        }
     }
+
+    pub fn move_ship(&mut self, instruction: &String) {
+        let n = instruction[1..].parse::<i32>().unwrap();
+        match instruction.chars().nth(0).unwrap() {
+            'N' => {
+                self.waypoint.1 += n;
+            }
+            'S' => {
+                self.waypoint.1 -= n;
+            }
+            'E' => {
+                self.waypoint.0 += n;
+            }
+            'W' => {
+                self.waypoint.0 -= n;
+            }
+            'L' => {
+                self.change_direction(n);
+            }
+            'R' => {
+                self.change_direction(-n);
+            }
+            'F' => {
+                self.coords.0 += self.waypoint.0 * n;
+                self.coords.1 += self.waypoint.1 * n;
+            }
+            _ => panic!("ARGH!"),
+        }
+    }
+
+    fn change_direction(&mut self, degrees: i32) {
+        let rotation = (degrees as f64).to_radians();
+        let x = ((self.waypoint.0 as f64) * rotation.cos() - (self.waypoint.1 as f64) * rotation.sin()).round() as i32;
+        let y = ((self.waypoint.1 as f64) * rotation.cos() + (self.waypoint.0 as f64) * rotation.sin()).round() as i32;
+        self.waypoint = (x, y);
+    }
+}
+
+
+fn manhattan(coords: (i32,i32)) -> i32 {
+    coords.0.abs() + coords.1.abs()
 }
 
 fn part_1(contents: &String) -> i32 {
@@ -106,7 +158,7 @@ fn part_1(contents: &String) -> i32 {
     for instruction in instructions {
         ship.move_ship(&instruction);
     }
-    ship.manhattan()
+    manhattan(ship.coords)
 }
 
 fn part_2(contents: &String) -> i32 {
@@ -114,11 +166,11 @@ fn part_2(contents: &String) -> i32 {
         .split('\n')
         .map(|line| line.to_string())
         .collect::<Vec<String>>();
-    let mut ship = Ship::new();
+    let mut ship = ShipWithWaypoint::new((10,1));
     for instruction in instructions {
         ship.move_ship(&instruction);
     }
-    ship.manhattan()
+    manhattan(ship.coords)
 }
 
 #[cfg(test)]
@@ -142,6 +194,6 @@ F7
 R90
 F11"
         .to_string();
-        assert_eq!(super::part_2(&test_data), -1);
+        assert_eq!(super::part_2(&test_data), 286);
     }
 }
