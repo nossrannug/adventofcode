@@ -66,6 +66,7 @@ nearby tickets:
         assert_eq!(super::part_1(&test_data), 71);
     }
 
+    #[ignore]
     #[test]
     fn part_2() {
         let test_data = "class: 0-1 or 4-19
