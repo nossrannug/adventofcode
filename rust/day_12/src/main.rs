@@ -103,7 +103,7 @@ impl ShipWithWaypoint {
     pub fn new(waypoint: (i32, i32)) -> ShipWithWaypoint {
         ShipWithWaypoint {
             coords: (0, 0),
-            waypoint
+            waypoint,
         }
     }
 
@@ -138,14 +138,17 @@ impl ShipWithWaypoint {
 
     fn change_direction(&mut self, degrees: i32) {
         let rotation = (degrees as f64).to_radians();
-        let x = ((self.waypoint.0 as f64) * rotation.cos() - (self.waypoint.1 as f64) * rotation.sin()).round() as i32;
-        let y = ((self.waypoint.1 as f64) * rotation.cos() + (self.waypoint.0 as f64) * rotation.sin()).round() as i32;
+        let x = ((self.waypoint.0 as f64) * rotation.cos()
+            - (self.waypoint.1 as f64) * rotation.sin())
+        .round() as i32;
+        let y = ((self.waypoint.1 as f64) * rotation.cos()
+            + (self.waypoint.0 as f64) * rotation.sin())
+        .round() as i32;
         self.waypoint = (x, y);
     }
 }
 
-
-fn manhattan(coords: (i32,i32)) -> i32 {
+fn manhattan(coords: (i32, i32)) -> i32 {
     coords.0.abs() + coords.1.abs()
 }
 
@@ -166,7 +169,7 @@ fn part_2(contents: &String) -> i32 {
         .split('\n')
         .map(|line| line.to_string())
         .collect::<Vec<String>>();
-    let mut ship = ShipWithWaypoint::new((10,1));
+    let mut ship = ShipWithWaypoint::new((10, 1));
     for instruction in instructions {
         ship.move_ship(&instruction);
     }

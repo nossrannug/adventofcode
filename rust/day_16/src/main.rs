@@ -28,12 +28,18 @@ fn part_1(contents: &String) -> i32 {
         }
         agg
     });
-    groups[2].split('\n').skip(1).flat_map(|line| line.split(',').map(|n| n.parse::<i32>().unwrap())).fold(Vec::new(), |mut v, n| {
-        if !map.get(&n).is_some() {
-            v.push(n);
-        }
-        v
-    }).iter().sum()
+    groups[2]
+        .split('\n')
+        .skip(1)
+        .flat_map(|line| line.split(',').map(|n| n.parse::<i32>().unwrap()))
+        .fold(Vec::new(), |mut v, n| {
+            if !map.get(&n).is_some() {
+                v.push(n);
+            }
+            v
+        })
+        .iter()
+        .sum()
 }
 
 fn part_2(contents: &String) -> i32 {

@@ -9,7 +9,7 @@ fn main() {
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
-struct Point(i32,i32,i32,i32);
+struct Point(i32, i32, i32, i32);
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 struct Cube(i32, i32, i32);
@@ -51,8 +51,8 @@ fn process_3d(grid: &Grid) -> Grid {
     let mut new_grid = Grid::new();
     for cube in &grid.cubes {
         let mut count = 0usize;
-        for (x,y,z) in &surrounding {
-            let value = Cube(cube.0+x, cube.1+y, cube.2+z);
+        for (x, y, z) in &surrounding {
+            let value = Cube(cube.0 + x, cube.1 + y, cube.2 + z);
             if let Some(_) = grid.cubes.get(&value) {
                 count += 1;
             } else {
@@ -66,8 +66,8 @@ fn process_3d(grid: &Grid) -> Grid {
 
     for cube in &inactive_cubes {
         let mut count = 0usize;
-        for (x,y,z) in &surrounding {
-            let value = Cube(cube.0+x, cube.1+y, cube.2+z);
+        for (x, y, z) in &surrounding {
+            let value = Cube(cube.0 + x, cube.1 + y, cube.2 + z);
             if let Some(_) = grid.cubes.get(&value) {
                 count += 1;
             }
@@ -83,8 +83,8 @@ fn process_3d(grid: &Grid) -> Grid {
     new_grid
 }
 
-fn generate_4d() -> Vec<(i32,i32,i32,i32)> {
-    let p = vec![-1,0,1];
+fn generate_4d() -> Vec<(i32, i32, i32, i32)> {
+    let p = vec![-1, 0, 1];
     let mut v = Vec::new();
     for x in &p {
         for y in &p {
@@ -93,7 +93,7 @@ fn generate_4d() -> Vec<(i32,i32,i32,i32)> {
                     if *x == 0 && *y == 0 && *z == 0 && *w == 0 {
                         continue;
                     }
-                    v.push((*x,*y,*z,*w));
+                    v.push((*x, *y, *z, *w));
                 }
             }
         }
@@ -108,8 +108,8 @@ fn process_4d(grid: &Grid4d) -> Grid4d {
     let mut new_grid = Grid4d::new();
     for cube in &grid.cubes {
         let mut count = 0usize;
-        for (x,y,z, w) in &surrounding {
-            let value = Cube4d(cube.0+x, cube.1+y, cube.2+z, cube.3+w);
+        for (x, y, z, w) in &surrounding {
+            let value = Cube4d(cube.0 + x, cube.1 + y, cube.2 + z, cube.3 + w);
             if let Some(_) = grid.cubes.get(&value) {
                 count += 1;
             } else {
@@ -123,8 +123,8 @@ fn process_4d(grid: &Grid4d) -> Grid4d {
 
     for cube in &inactive_cubes {
         let mut count = 0usize;
-        for (x,y,z, w) in &surrounding {
-            let value = Cube4d(cube.0+x, cube.1+y, cube.2+z, cube.3+w);
+        for (x, y, z, w) in &surrounding {
+            let value = Cube4d(cube.0 + x, cube.1 + y, cube.2 + z, cube.3 + w);
             if let Some(_) = grid.cubes.get(&value) {
                 count += 1;
             }

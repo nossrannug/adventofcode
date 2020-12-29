@@ -19,17 +19,17 @@ impl Game {
     pub fn new(numbers: Vec<i32>) -> Game {
         Game {
             turn: numbers.len(),
-            last_number: numbers[numbers.len()-1],
-            numbers: numbers[0..numbers.len()-1]
-                .iter()
-                .enumerate()
-                .fold(HashMap::new(), |mut map, (idx, n)| {
-                    map.insert(*n, idx+1);
+            last_number: numbers[numbers.len() - 1],
+            numbers: numbers[0..numbers.len() - 1].iter().enumerate().fold(
+                HashMap::new(),
+                |mut map, (idx, n)| {
+                    map.insert(*n, idx + 1);
                     map
-                }),
+                },
+            ),
         }
     }
-    
+
     pub fn take_turn(&mut self) -> i32 {
         match self.numbers.insert(self.last_number, self.turn) {
             Some(n) => {
@@ -52,13 +52,19 @@ impl Game {
 }
 
 fn part_1(contents: &String) -> i32 {
-    let numbers = contents.split(',').map(|s| s.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+    let numbers = contents
+        .split(',')
+        .map(|s| s.parse::<i32>().unwrap())
+        .collect::<Vec<i32>>();
     let mut game = Game::new(numbers);
     game.get_nth_number(2020)
 }
 
 fn part_2(contents: &String) -> i32 {
-    let numbers = contents.split(',').map(|s| s.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+    let numbers = contents
+        .split(',')
+        .map(|s| s.parse::<i32>().unwrap())
+        .collect::<Vec<i32>>();
     let mut game = Game::new(numbers);
     game.get_nth_number(30000000)
 }
@@ -67,22 +73,19 @@ fn part_2(contents: &String) -> i32 {
 mod tests {
     #[test]
     fn part_1() {
-        let test_data = "0,3,6"
-            .to_string();
+        let test_data = "0,3,6".to_string();
         assert_eq!(super::part_1(&test_data), 436);
     }
 
     #[test]
     fn part_1_1() {
-        let test_data = "2,3,1"
-            .to_string();
+        let test_data = "2,3,1".to_string();
         assert_eq!(super::part_1(&test_data), 78);
     }
 
     #[test]
     fn part_2() {
-        let test_data = "0,3,6"
-            .to_string();
+        let test_data = "0,3,6".to_string();
         assert_eq!(super::part_2(&test_data), 175594);
     }
 }

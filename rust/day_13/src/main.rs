@@ -44,13 +44,16 @@ fn find_timestamp(buses: Vec<(usize, i32)>) -> i64 {
 
 fn part_2(contents: &String) -> i64 {
     let lines = contents.split('\n').collect::<Vec<&str>>();
-    let buses = lines[1].split(',').enumerate().fold(Vec::new(), |mut agg, v| {
-        match v.1.parse::<i32>() {
-            Ok(n) => agg.push((v.0, n)),
-            _ => {}
-        }
-        agg
-    });
+    let buses = lines[1]
+        .split(',')
+        .enumerate()
+        .fold(Vec::new(), |mut agg, v| {
+            match v.1.parse::<i32>() {
+                Ok(n) => agg.push((v.0, n)),
+                _ => {}
+            }
+            agg
+        });
     find_timestamp(buses)
 }
 
@@ -68,7 +71,7 @@ mod tests {
     fn part_2() {
         let test_data = "939
 7,13,x,x,59,x,31,19"
-        .to_string();
+            .to_string();
         assert_eq!(super::part_2(&test_data), 1068781);
     }
 }
