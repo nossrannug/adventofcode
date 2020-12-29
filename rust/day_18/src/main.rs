@@ -118,10 +118,10 @@ mod tests {
 
     #[test]
     fn part_2() {
-        let test_data = ".#.
-..#
-###"
-        .to_string();
-        assert_eq!(super::part_2(&test_data), 848);
+        let test_data = "2 * 3 + (4 * 5)
+5 + (8 * 3 + 9 + 3 * 4 * 3)
+((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2
+5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))".to_string();
+        assert_eq!(super::part_2(&test_data), 46 + 1445 + 23340 + 669060);
     }
 }
